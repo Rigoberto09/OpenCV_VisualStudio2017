@@ -11,6 +11,9 @@ namespace FaceDetection
             string direccionVideo = "";
             do
             {
+                //limpiar consola
+                Console.Clear();
+
                 Console.WriteLine("Ingrese la dirección del video con el nombre:");
                 Console.WriteLine("ejemplo: C:/Users/rborjas/OneDrive/Escritorio/Videos/video.mp4");
                 direccionVideo = Console.ReadLine();
@@ -80,26 +83,34 @@ namespace FaceDetection
                 {
                     using (var frame = new Mat())
                     {
+                        // Verificar si la carpeta de destino existe, si no, crearla
+
+                        string frameFilename = Path.Combine(framesPath, $"frame_{frameNumber:0000}.png");
+                        string folderPath = Path.GetDirectoryName(frameFilename);
+                        if (!Directory.Exists(folderPath))
+                        {
+                            Directory.CreateDirectory(folderPath);
+                        }
+
                         if (!captureFotoGramas.Read(frame))
                         {
+
+
                             Console.WriteLine($"Finalizacion de fotogramas frame_{frameNumber}.png Precione enter para continuar con la Identifiacacion");
                             Console.ReadLine();
                             break;
                         }
+                        //Limpiar una linea
+                        Console.Clear();
+                        Console.WriteLine($"Ruta destino {folderPath}");
                         Console.WriteLine($"Creando imagen {frameNumber}.");
                         //Console.ReadLine(); //habilitar para crear imgen por cada enter
 
                         // Guarda el frame como una imagen
 
                         //string frameFilename = Path.Combine(framesPath, $"frame_{frameNumber:0000}.png");
-                        string frameFilename = Path.Combine(framesPath, $"frame_{frameNumber:0000}.png");
 
-                        // Verificar si la carpeta de destino existe, si no, crearla
-                        string folderPath = Path.GetDirectoryName(frameFilename);
-                        if (!Directory.Exists(folderPath))
-                        {
-                            Directory.CreateDirectory(folderPath);
-                        }
+
 
                         // Guardar el archivo
                         Cv2.ImWrite(frameFilename, frame);
